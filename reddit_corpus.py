@@ -1,32 +1,37 @@
 import praw
-from pprint import pprint
 import json
+import sys
+
+if len(sys.argv) < 3:
+  print ("Please use arguments: (1) subreddit name (2) output file name")
+  exit()
+
+subred = sys.argv[1]
+output = sys.argv[2]
+
+
 
 user_agent = ("Corpus creator by Leah https://github.com/leahrnh")
 r = praw.Reddit(user_agent=user_agent)
 
-f = open ('tmp.txt', 'w')
+f = open (output, 'w')
 
-subreddit = r.get_subreddit('movies')
+comment_pairs = 0
+
+def readcomments(q, comments):
+      for comment in comments:
+        global comment_pairs
+        comment_pairs += 1
+        f.write(json.dumps({"question":q, "answer":comment.body}, sort_keys=False, indent=4))
+        readcomments(comment.body, comment.replies)
+
+subreddit = r.get_subreddit(subred)
 #for submission in subreddit.get_hot(limit=1):
 submission = r.get_submission(submission_id='2u0wiq')
-t = submission.title
+q = submission.title
 submission.replace_more_comments(limit=None, threshold=0)
 forest_comments = submission.comments
-#flat_comments = praw.helpers.flatten_tree(submission.comments)
-for comment in forest_comments:
-        #print(comment.body)
-        f.write(comment.body)
-        f.write('\n')
+readcomments(q, forest_comments)
 
+print "Created file with %d comment pairs" % comment_pairs
 f.close()
-
-
-q = "question"
-a = "answer"
-
-f2 = open ('tmp2.txt', 'w')
-f2.write(json.dumps({'question':q, 'answer':a}, file))
-f2.write(json.dumps({'question':a, 'answer':q}, file))
-
-f2.close()
