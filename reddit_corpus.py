@@ -9,7 +9,7 @@ import sys
 #subredditList = ['movies', 'books', 'Sports', 'News', 'television', 'gaming', 'gadgets', 'worldnews', 'programming', 'compsci', 'machinelearning', 'history']
 subredditList = ['worldnews', 'programming', 'compsci', 'machinelearning', 'history']
 
-user_agent = ("Corpus creator by Leah https://github.com/leahrnh")
+user_agent = ("Corpus creator by Leah https://github.com/leahrnh/reddit_corpus")
 r = praw.Reddit(user_agent=user_agent)
 
 comment_pairs = 0
