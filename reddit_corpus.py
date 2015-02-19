@@ -5,9 +5,9 @@ import praw
 import re
 import json
 import sys
+import time
 
-#subredditList = ['movies', 'books', 'Sports', 'News', 'television', 'gaming', 'gadgets', 'worldnews', 'programming', 'compsci', 'machinelearning', 'history']
-subredditList = ['worldnews', 'programming', 'compsci', 'machinelearning', 'history']
+subredditList = ['movies', 'books', 'Sports', 'News', 'television', 'gaming', 'gadgets', 'worldnews', 'programming', 'compsci', 'machinelearning', 'history']
 
 user_agent = ("Corpus creator by Leah https://github.com/leahrnh/reddit_corpus")
 r = praw.Reddit(user_agent=user_agent)
@@ -61,7 +61,8 @@ def readcomments(q, comments, f):
             a_id = line_id
             #print("Found comment pair: " + q[:10] + "...  " + comment.body[:20] + "...")
             #d = OrderedDict([("question", q), ("answer", comment.body), ("corpus", "reddit"), ("docID", submission.subreddit_id), ("qSentId", q_id), ("aSentId", a_id)])
-            f.write(json.dumps({"question":q, "answer":comment.body, "corpus":"reddit", "docID":submission.subreddit_id, "qSentId":q_id, "aSentId":a_id}, indent=4))
+            f.write(json.dumps({"question":q, "answer":comment.body, "corpus":"reddit", "docID":submission.subreddit_id, "qSentId":q_id, "aSentId":a_id}))
+            f.write(",")
             f.flush()
             #json.dumps(d, output, indent=4)
             comment_pairs += 1
@@ -70,11 +71,13 @@ def readcomments(q, comments, f):
 
 for subred in subredditList:
     print("Examining subreddit " + subred)
-    fileName = "reddit_corpus/" + subred + "_" + str(d) + ".txt"
+    fileName = "reddit_corpus/" + subred + "_" + str(d) + ".json"
     f = open (fileName, 'w')
+    f.write("[")
     print("Created file " + fileName)
     subreddit = r.get_subreddit(subred)
     for submission in subreddit.get_hot(limit=25):
         processSubmission(submission, 0)
+    f.write("]")
     f.close()
     print("Created file %s with %d comment pairs" % (fileName, comment_pairs))
