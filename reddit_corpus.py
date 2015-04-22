@@ -7,7 +7,7 @@ import json
 import sys
 import time
 
-subredditList = ['movies', 'books', 'Sports', 'News', 'television', 'gaming', 'gadgets', 'worldnews', 'programming', 'compsci', 'machinelearning', 'history', 'weather']
+subredditList = ['movies', 'books', 'Sports', 'News', 'television', 'gaming', 'gadgets', 'worldnews', 'programming', 'compsci', 'machinelearning', 'history', 'weather', 'AskReddit']
 
 user_agent = ("Corpus creator by Leah https://github.com/leahrnh/reddit_corpus")
 r = praw.Reddit(user_agent=user_agent)
@@ -86,3 +86,18 @@ for subred in subredditList:
     f.write("]")
     f.close()
     print("Created file %s with %d comment pairs" % (fileName, comment_pairs))
+
+#This section for adding specific threads (aka submissions) by submission id
+## fileName = "reddit_corpus/extra_" + str(d) + ".json"
+## f = open (fileName, 'w')
+## f.write("[")
+## print("Created file " + fileName)
+## submissionList = ["1r8tj2", "1tpqq9", "2936kh", "2gzw73", "22aoi7", "2w502k"]
+## first = True
+## for sub in submissionList:
+##     submission = r.get_submission(submission_id=sub)
+##     processSubmission(submission, 0, first)
+##     first = False
+## f.write("]")
+## f.close()
+## print("Created file %s with %d comment pairs" % (fileName, comment_pairs))
