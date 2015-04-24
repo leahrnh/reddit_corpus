@@ -3,7 +3,7 @@ Reddit Corpus Creator
 
 A python script to read a selection of Reddit threads, and save
 statement-response pairs. It saves up to 3 responses for each
-statement, chosen from the top submissions of the day.
+statement, taken from comments in the top submissions of the day.
 
 Primarily uses Praw https://praw.readthedocs.org/
 
@@ -39,8 +39,26 @@ has the following fields:
  * answer = a comment posted in response to the question
  * corpus = "reddit"
 
+SentID is currently not very meaningful; it starts its count over with
+each collection. However, it could be modified to
+be more useful, if desired.
+
 Corpus
 -------
-The current corpus contains 268 files collected between February 2 and
+The current corpus contains 267 files collected between February 2 and
 April 21, 2015. Most files contain between 200 and 3,000 turn pairs,
-depending on the subreddit, although AskReddit tends to run closer to 15,000/day.
+depending on the subreddit, although AskReddit tends to run closer to
+15,000/day.
+
+Warning
+-------
+There's a bug that occasionally results in an extra comma at the
+beginning of the json file.
+
+	[,{"docID": ...
+
+Instead of
+
+	[{"docID": ....
+
+Possibly due to a submission not having any responses? If the json is not valid, check for this issue.
